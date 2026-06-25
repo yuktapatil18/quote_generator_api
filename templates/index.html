@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+```
+<title>AI Motivational Dashboard</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='style.css') }}">
+```
+
+</head>
+
+<body class="min-h-screen text-white bg-gradient-to-br from-purple-900 via-gray-900 to-blue-900">
+
+```
+<div class="container mx-auto p-8">
+
+    <!-- Header -->
+
+    <h1 class="
+    text-5xl
+    font-extrabold
+    bg-gradient-to-r
+    from-pink-400
+    to-blue-400
+    bg-clip-text
+    text-transparent">
+
+        AI Motivational Dashboard
+
+    </h1>
+
+    <p class="text-gray-300 mt-2">
+        Get inspired every day
+    </p>
+
+    <!-- Welcome Card -->
+
+    <div class="
+    mt-6
+    bg-white/10
+    backdrop-blur-lg
+    p-5
+    rounded-2xl
+    border border-white/20">
+
+        <h2 class="text-xl font-semibold">
+            Welcome Back 🚀
+        </h2>
+
+        <p class="text-gray-300 mt-2">
+            Choose your mood and generate motivational quotes.
+        </p>
+
+    </div>
+
+    <!-- Stats Cards -->
+
+    <div class="grid md:grid-cols-3 gap-4 mt-8">
+
+        <div class="
+        bg-white/10
+        backdrop-blur-lg
+        p-6
+        rounded-2xl
+        shadow-xl
+        border border-white/20">
+
+            <h3 class="text-gray-400">
+                Mood
+            </h3>
+
+            <p class="text-2xl font-bold mt-2">
+                {{ display_mood }}
+            </p>
+
+        </div>
+
+        <div class="
+        bg-white/10
+        backdrop-blur-lg
+        p-6
+        rounded-2xl
+        shadow-xl
+        border border-white/20">
+
+            <h3 class="text-gray-400">
+                Quotes Available
+            </h3>
+
+            <p class="text-2xl font-bold mt-2">
+                {{ total_quotes }}
+            </p>
+
+        </div>
+
+        <div class="
+        bg-white/10
+        backdrop-blur-lg
+        p-6
+        rounded-2xl
+        shadow-xl
+        border border-white/20">
+
+            <h3 class="text-gray-400">
+                Author
+            </h3>
+
+            <p class="text-2xl font-bold mt-2">
+                {{ author }}
+            </p>
+
+        </div>
+
+                <div class="
+                bg-white/10
+                backdrop-blur-lg
+                p-6
+                rounded-2xl
+                shadow-xl
+                border border-white/20">
+
+                    <h3 class="text-gray-400">
+                        Source
+                    </h3>
+
+                    <p class="text-2xl font-bold mt-2">
+                        API 🌐
+                    </p>
+
+                </div>
+
+
+    </div>
+
+    <!-- Quote Card -->
+
+    <div class="
+    mt-10
+    bg-white/10
+    backdrop-blur-xl
+    rounded-3xl
+    p-8
+    shadow-2xl
+    border border-white/20">
+
+        {% if mood == "focused" %}
+
+        <span class="bg-green-600 px-4 py-2 rounded-full">
+            Focused 🚀
+        </span>
+
+        {% elif mood == "happy" %}
+
+        <span class="bg-yellow-500 text-black px-4 py-2 rounded-full">
+            Happy 😊
+        </span>
+
+        {% elif mood == "success" %}
+
+        <span class="bg-purple-600 px-4 py-2 rounded-full">
+            Success 🏆
+        </span>
+
+        {% elif mood == "study" %}
+
+        <span class="bg-blue-600 px-4 py-2 rounded-full">
+            Study 📚
+        </span>
+
+        {% endif %}
+
+        <h2 class="text-2xl font-semibold mt-5">
+            Today's Motivation
+        </h2>
+
+        <p id="quoteText" class="mt-4 text-xl italic">
+            "{{ quote }}"
+        </p>
+
+        <p class="mt-3 text-gray-300">
+            - {{ author }}
+        </p>
+
+        <form action="/" method="GET">
+
+            <label class="block mt-6 mb-2">
+                Select Mood
+            </label>
+
+            <select
+                name="mood"
+                class="bg-gray-800 p-3 rounded-lg w-full">
+
+                <option value="focused"
+                    {% if mood=="focused" %}selected{% endif %}>
+                    Focused 🚀
+                </option>
+
+                <option value="happy"
+                    {% if mood=="happy" %}selected{% endif %}>
+                    Happy 😊
+                </option>
+
+                <option value="success"
+                    {% if mood=="success" %}selected{% endif %}>
+                    Success 🏆
+                </option>
+
+                <option value="study"
+                    {% if mood=="study" %}selected{% endif %}>
+                    Study 📚
+                </option>
+
+            </select>
+
+            <div class="flex flex-wrap gap-4 mt-6">
+
+                <button
+                    class="
+                    bg-gradient-to-r
+                    from-blue-500
+                    to-purple-500
+                    px-6
+                    py-3
+                    rounded-lg
+                    hover:scale-105
+                    transition">
+
+                    Generate Quote
+
+                </button>
+
+                <button
+                    type="button"
+                    onclick="copyQuote()"
+                    class="
+                    bg-gradient-to-r
+                    from-green-500
+                    to-emerald-600
+                    px-6
+                    py-3
+                    rounded-lg
+                    hover:scale-105
+                    transition">
+
+                    Copy Quote
+
+                </button>
+
+                <a href="/favorite?quote={{ quote }}&author={{ author }}&mood={{ mood }}">
+
+                    <button
+                        type="button"
+                        class="
+                        bg-gradient-to-r
+                        from-red-500
+                        to-pink-600
+                        px-6
+                        py-3
+                        rounded-lg
+                        hover:scale-105
+                        transition">
+
+                        ❤️ Favorite
+
+                    </button>
+
+                </a>
+
+            </div>
+
+        </form>
+
+    </div>
+    <div class="mt-8 bg-white/10 backdrop-blur-xl rounded-3xl p-6 shadow-xl border border-white/20">
+        <h2 class="text-2xl font-bold mb-4">
+                 Search Quotes 🔍
+        </h2>
+
+                <form action="/" method="GET">
+
+                    <input
+                        type="text"
+                        name="search"
+                        value="{{ search }}"
+                        placeholder="Search quote..."
+                        class="
+                        w-full
+                        p-3
+                        rounded-lg
+                        text-black">
+
+                <button
+                    class="
+                    mt-4
+                    bg-blue-600
+                    px-5
+                    py-2
+                    rounded-lg">
+
+                Search
+
+          </button>
+
+        </form>
+
+    </div>
+    <!-- Recent Quotes -->
+
+    <div class="
+    mt-8
+    bg-white/10
+    backdrop-blur-xl
+    rounded-3xl
+    p-6
+    shadow-xl
+    border border-white/20">
+
+        <h2 class="text-2xl font-bold mb-4">
+            Recent Quotes
+        </h2>
+
+        {% for item in history %}
+
+        <div class="border-b border-gray-700 py-3">
+            {{ item }}
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+    <!-- Favorite Quotes -->
+
+    <div class="
+    mt-8
+    bg-white/10
+    backdrop-blur-xl
+    rounded-3xl
+    p-6
+    shadow-xl
+    border border-white/20">
+
+        <h2 class="text-2xl font-bold mb-4">
+            Favorite Quotes ❤️
+        </h2>
+
+        {% for item in favorites %}
+
+        <div class="border-b border-gray-700 py-3">
+            {{ item }}
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+</div>
+
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+```
+
+</body>
+
+</html>
